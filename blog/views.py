@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Comment, Post
 from .forms import CommentForm
 from django.http import HttpResponseRedirect, JsonResponse
-from users.models import Profile
+from users.models import Profile #profile
 from itertools import chain
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
