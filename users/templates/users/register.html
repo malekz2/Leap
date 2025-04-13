@@ -38,8 +38,41 @@
         <form action="" method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
-                {{ form|crispy }}
+                <strong>{{ form.username|as_crispy_field }}</strong>
+                <strong>{{ form.email|as_crispy_field }}</strong>
+                <strong>{{ form.password1|as_crispy_field }}</strong>
+                <strong>{{ form.password2|as_crispy_field }}</strong>
+                <strong>{{ form.first_name|as_crispy_field }}</strong>
+                <strong>{{ form.last_name|as_crispy_field }}</strong>
+                <strong>{{ form.desired_role|as_crispy_field }}</strong>
+                <strong>{{ form.interests|as_crispy_field }}</strong>
             </fieldset>
+
+            <!-- Application Question Field: Initially Hidden -->
+            <div id="div_id_application_question" style="display: none;">
+                {{ form.application_question|as_crispy_field }}
+            </div>
+
+            <!-- Areas of Interest Section -->
+
+            <h4 class="mt-4 mb-3">Areas of Interest</h4>
+
+            {{ form.stem|as_crispy_field }}
+            <!-- Other STEM Field: Initially Hidden -->
+            <div id="div_id_stem_other" style="display: none;">
+                {{ form.stem_other|as_crispy_field }}
+            </div>
+
+            {{ form.athletics|as_crispy_field }}
+            <!-- Other Athletics Field: Initially Hidden -->
+            <div id="div_id_athletics_other" style="display: none;">
+                {{ form.athletics_other|as_crispy_field }}
+            </div>
+
+            <strong>{{ form.bio|as_crispy_field }}</strong>
+
+            <br>
+
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Sign Up</button>
             </div>
@@ -51,4 +84,40 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Run when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Helper function to toggle visibility of "other" input fields
+        const toggleField = (name, fieldId) => {
+            const checkboxes = document.querySelectorAll(`input[name="${name}"]`);
+            const field = document.getElementById(fieldId);
+
+            const updateDisplay = () => {
+                const isOther = Array.from(checkboxes).some(cb => cb.value === 'other' && cb.checked);
+                field.style.display = isOther ? 'block' : 'none';
+            };
+
+            checkboxes.forEach(cb => cb.addEventListener('change', updateDisplay));
+            updateDisplay();
+        };
+
+        // Setup toggles for athletics and stem fields
+        toggleField('athletics', 'div_id_athletics_other');
+        toggleField('stem', 'div_id_stem_other');
+
+        // Handle application question visibility based on role
+        const desiredRole = document.querySelector('select[name="desired_role"]');
+        const appQuestion = document.getElementById('div_id_application_question');
+
+        if (desiredRole) {
+            const toggleAppQuestion = () => {
+                appQuestion.style.display = desiredRole.value !== 'mentee' ? 'block' : 'none';
+            };
+
+            desiredRole.addEventListener('change', toggleAppQuestion);
+            toggleAppQuestion();
+        }
+    });
+</script>
 {% endblock %}

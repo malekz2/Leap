@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="m-auto col-md-8">
+    <div class="content-section">
+        <h2 class="border-bottom pb-3 mb-4">Mentor Application</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="question">{{ user.profile.application_question }}</label>
+                <textarea name="question" id="question" class="form-control" rows="5" required></textarea>
+            </div>
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-outline-info">Submit Application</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

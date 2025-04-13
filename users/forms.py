@@ -3,24 +3,79 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Profile
 from PIL import Image
+from .models import Application
 
 class ProfileAdminForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = '__all__'
 
-
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
-    teach = forms.CharField(max_length=100, required=False, label="What do you want to Teach? (single words)")
-    learn = forms.CharField(max_length=100, required=False, label="What do you want to Learn? (single words)")
+    ACS_association = forms.CharField(max_length=100, required=False, label="ACS Association")
+    ROLE_CHOICES = [
+        ('mentor', 'Mentor'),
+        ('mentee', 'Mentee'),
+        ('both', 'Both'),
+    ]
+    desired_role = forms.ChoiceField(choices=ROLE_CHOICES, required=False, label="Desired Role")
+
+    application_question = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Application Question',
+    )
+    #class ProfileUpdateForm(forms.ModelForm):
+
+    interests = forms.CharField(max_length=100, required=True, label="Interests (single words)")
+    ATHLETICS_CHOICES = [
+        ('basketball', 'Basketball'),
+        ('football', 'Football'),
+        ('volleyball', 'Volleyball'),
+        ('other', 'Other'),
+    ]
+
+    STEM_CHOICES = [
+        ('physics', 'Physics'),
+        ('biology', 'Biology'),
+        ('computer_science', 'Computer Science'),
+        ('other', 'Other'),
+    ]
+
+    athletics = forms.MultipleChoiceField(
+        choices=ATHLETICS_CHOICES,
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='Athletics',
+    )
+    athletics_other = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Other Athletics (Keywords)',
+    )
+
+    stem = forms.MultipleChoiceField(
+        choices=STEM_CHOICES,
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        label='STEM',
+    )
+    stem_other = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Other STEM (Keywords)',
+    )
+
+
+
+
     bio = forms.CharField(
         max_length=350, 
         required=False, 
         label="Description, write something about yourself", 
         help_text="Write a description about yourself"
     ) 
-    google_form_url = forms.URLField(required=False, label='Google Form URL for Protege Application. <a href="https://docs.google.com/forms/u/0/">Create new Form</a>')
+    #google_form_url = forms.URLField(required=False, label='Google Form URL for Protege Application. <a href="https://docs.google.com/forms/u/0/">Create new Form</a>')
     
 
     class Meta:
@@ -30,9 +85,7 @@ class UserRegisterForm(UserCreationForm):
 
 class UserUpdateForm(forms.ModelForm):
     email = forms.EmailField()
-    teach = forms.CharField(max_length=100, required=False, label="What do you want to Teach? (single words)")
-    learn = forms.CharField(max_length=100, required=False, label="What do you want to Learn? (single words)")
-
+    question = forms.CharField(max_length=255, required=False, label="What question would you like to ask an applicant?")
 
 
     class Meta:
@@ -47,20 +100,23 @@ class ProfileUpdateForm(forms.ModelForm):
     height = forms.FloatField(widget=forms.HiddenInput(), required=False)
 
     image = forms.ImageField(label=('Image'), error_messages = {'invalid':("Image files only")}, widget=forms.FileInput, required=False)
-    teach = forms.CharField(max_length=100, required=False, label="What do you want to Teach? (single words)")
-    learn = forms.CharField(max_length=100, required=False, label="What do you want to Learn? (single words)")
     bio = forms.CharField(
         max_length=350, 
         required=False, 
         label="Description", 
         help_text="Write a description about yourself"
     )
-    google_form_url = forms.URLField(required=False, label="Google Form URL for Protege Application")
+    question = forms.CharField(
+        max_length=255,
+        required=False,
+        label="Mentor Application Question",
+        widget=forms.Textarea(attrs={'rows': 4})
+    )
 
 
     class Meta:
         model = Profile
-        fields = ['bio','date_of_birth','image',]
+        fields = ['bio','date_of_birth','image', 'question']
 
 
     """Saving Cropped Image"""

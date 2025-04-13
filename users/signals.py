@@ -15,8 +15,8 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwargs):
     profile = instance.profile
-    profile.teach = instance.profile.teach
-    profile.learn = instance.profile.learn
+    #profile.teach = instance.profile.teach
+    #profile.learn = instance.profile.learn
     profile.save()
 
 

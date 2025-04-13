@@ -11,7 +11,7 @@
 
   {% for post in posts %}
 
-  <article class="content-section" style="overflow: auto; ">
+</div>  <article class="content-section" style="overflow: auto; ">
     <div class="media">
       <img class="rounded-circle article-img " src="{{post.author.profile.image.url}}" alt="image">
       <div class="media-body">
@@ -104,6 +104,16 @@
 
   <!---->
 
+
+
+  <!-- blog/templates/blog/home.html -->
+
+  <h2>Active Users</h2>
+  <p>There are {{ active_users|length }} active users currently.</p>
+
+  <!--
+
+  {% comment %}
   <div class="content-section " style="border-top: 4px solid rgb(255, 0, 0);">
     <h4>Potential Mentors</h4>
     <br>
@@ -142,14 +152,358 @@
 
 </div>
 
-{% endblock %}
-{% block script %}
-<script>
+{% endcomment %}
+-->
 
-  var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
-  $('.add-border').each(function () {
-    $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
-  });
+<div class="row">
+  <!-- AI search - Left column -->
+  <div class="col-md-12 px-0">
+    <div class="content-section" style="border-top: 4px solid rgb(11, 124, 255);">
+      <h4>Registered Users <small class="text-muted">({{ random_users|length }} total)</small></h4>
+      <br>
+      <div class="user-list-container" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 5px; padding: 0 5px;">
+        <ul class="list-group">
+        <!--leave everything in the for loop alone-->
+          {% for user in random_users %}
+            {% if user.profile.pk %}
+              <li class="col-md-12 mb-3">
+                <a href="{% url 'mentor_application' pk=user.profile.pk %}" class="btn btn-outline-primary btn-block mentor-btn">
+                  <img class="rounded-circle mr-2" src="{{ user.profile.image.url }}" alt="{{ user.username }}" style="width: 30px; height: 30px;">
+                  <span class="username">{{ user.username }}</span>
+                    {% if user.profile.interests %}
+                    <span class="text-muted ml-2 interests-text"></span> interests: {{ user.profile.interests }}</span>
+                  {% endif %}
+                  <span class="apply-text">Apply</span>
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <br>
+    </div>
+  </div>
+  
+  <!-- Profile - Right column -->
+  <div class="col-md-12 px-0">
+    <div class="content-section shadow-sm" style="border-top: 4px solid #7952b3; border-radius: 8px; margin-bottom: 20px;">
+      <h4 class="d-flex align-items-center"><i class="fas fa-user-circle mr-2"></i> Your Profile</h4>
+      <div class="card profile-card" style="border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+        <div class="account-img-container text-center my-3">
+          <div class="img-cont d-flex justify-content-center">
+            <img class="rounded-circle account-img" src="{{request.user.profile.image.url}}" alt="image" style="width: 110px; height: 110px; object-fit: cover; border: 3px solid #7952b3; box-shadow: 0 5px 15px rgba(0,0,0,0.15);">
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title text-center font-weight-bold">{{request.user.first_name}} {{request.user.last_name}} 
+            <span class="text-primary">@{{request.user.username}}</span>
+          </h5>
+          <p class="card-text text-center text-muted"><i class="far fa-envelope mr-1"></i> {{request.user.email}}</p>
+          <p class="card-text text-center">{{request.user.profile.bio|truncatechars:100}}</p>
 
-</script>
-{% endblock %}
+          <hr>
+          <!-- Stats Row -->
+          <div class="row">
+            <div class="col-6">
+              <div class="stat-card p-2 rounded bg-light text-center">
+                <span class="h6"><i class="fas fa-users mr-1"></i> Followers</span>
+                <p class="h4 mb-0 text-primary">{{request.user.following.count}}</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="stat-card p-2 rounded bg-light text-center">
+                <span class="h6"><i class="fas fa-user-friends mr-1"></i> Following</span>
+                <p class="h4 mb-0 text-primary">{{request.user.profile.following.count}}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Action Buttons Row -->
+          <div class="row mt-3">
+            <div class="col-4">
+              <a href="{% url 'profile' %}" class="btn btn-primary btn-block">
+                <i class="fas fa-edit mr-1"></i> Edit Profile
+              </a>
+            </div>
+            <div class="col-4">
+              <a onclick="copytoclip()" class="btn btn-outline-primary btn-block">
+                <i class="far fa-copy mr-1"></i> Copy URL
+              </a>
+            </div>
+            <div class="col-4">
+              <a href="{% url 'room-enroll' %}" class="btn btn-success btn-block">
+                <i class="fas fa-comments mr-1"></i> My Chats
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+      
+      <!-- Friends list with chat buttons -->
+      <div class="card mt-3 friend-card" style="border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #4270E7, #7952b3); color: white; border-radius: 10px 10px 0 0;">
+          <h5 class="mb-0"><i class="fas fa-user-friends mr-2"></i> Friends</h5>
+          <span class="badge badge-light">
+            {% if request.user.friendlist.friends.all %}
+              {{ request.user.friendlist.friends.all|length }}
+            {% else %}
+              0
+            {% endif %}
+          </span>
+        </div>
+        <div class="card-body p-0"></div>
+          <div class="friend-list" style="max-height: 250px; overflow-y: auto;"></div>
+            {% if request.user.friendlist.friends.all %}
+              <ul class="list-group list-group-flush">
+                {% for friend in request.user.friendlist.friends.all %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center friend-item">
+                    <div class="d-flex align-items-center">
+                      <img class="rounded-circle mr-2" src="{{ friend.profile.image.url }}" alt="{{ friend.username }}" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #eee;">
+                      <div>
+                        <div class="font-weight-bold">{{ friend.username }}</div>
+                        <small class="text-muted">{{ friend.profile.bio|truncatechars:20 }}</small>
+                      </div>
+                    </div>
+                    <a href="{% url 'room-choice' friend.id %}" class="btn btn-sm btn-success chat-btn">
+                      <i class="fas fa-comment-dots mr-1"></i> Chat
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <div class="p-4 text-center text-muted">
+                <i class="far fa-sad-tear fa-2x mb-2"></i>
+                <p>You don't have any friends yet.</p>
+                <a href="#" class="btn btn-sm btn-outline-primary">Find Friends</a>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .content-section {
+    transition: all 0.3s ease;
+    padding: 20px;
+    background-color: white;
+    margin-bottom: 15px;
+  }
+  
+  .mentor-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: left;
+    margin-bottom: 8px;
+    border: 1px solid #e0e0e0;
+    background-color: white;
+  }
+  
+  .mentor-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #007bff;
+  }
+  
+  .mentor-btn .username {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .mentor-btn .interests-text {
+    font-size: 0.85em;
+    color: #6c757d;
+  }
+  
+  .mentor-btn .apply-text {
+    float: right;
+    background-color: #f8f9fa;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #007bff;
+    transition: all 0.2s;
+  }
+  
+  .mentor-btn:hover .apply-text {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .stat-card {
+    transition: all 0.3s;
+    border: 1px solid #eee;
+  }
+  
+  .stat-card:hover {
+    background-color: #f0f7ff !important;
+  }
+  
+  .friend-item {
+    transition: all 0.2s;
+  }
+  
+  .friend-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .chat-btn {
+    opacity: 0.8;
+    transition: all 0.2s;
+  }
+  
+  .friend-item:hover .chat-btn {
+    opacity: 1;
+  }
+  
+  .profile-card, .friend-card {
+    transition: all 0.3s;
+  }
+  
+  .profile-card:hover, .friend-card:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  }
+</style>
+
+  
+
+  <!--Manual search-->
+<!--
+  {% comment %}
+
+  <div class="content-section col-md-12" style="border-top: 4px solid blue;">
+    <div class="d-flex justify-content-between align-items-center">
+      <h4> </h4>
+      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#manualSearchContent"
+        aria-expanded="false" aria-controls="manualSearchContent">
+        
+      </button>
+    </div>
+    <br>
+    
+    <div class="collapse" id="manualSearchContent">
+      <div class="row">
+        <div class="col-md-12"></div>
+
+        <div class="col-md-12">
+          <h5>Academics</h5>
+          <div class="accordion" id="academicsAccordion">
+            <div class="card">
+              <div class="card-header" id="stemHeading">
+                <h2 class="mb-0">
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#stemCollapse">
+                    STEM
+                  </button>
+                </h2>
+              </div>
+              <div id="stemCollapse" class="collapse" data-parent="#academicsAccordion">
+                <div class="card-body">
+                  <div class="""row"></div>
+                    {% for user in random_users %}
+                    {% if user.profile.pk %}
+                    <div class="""col-md-6 mb-3"></div>
+                      <a href="{% url 'mentor_application' pk=user.profile.pk %}" class="""btn btn-outline-primary btn-block mentor-btn"></a>
+                        <span class="""username">{{ user.username }}</span>
+                        <span class="""apply-text">Apply</span>
+                      </a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              {% endcomment %}
+-->
+              <style>
+                .mentor-btn {
+                  transition: all 0.3s ease;
+                  position: relative;
+                  overflow: hidden;
+                  padding: 10px 15px;
+                  border-radius: 5px;
+                  text-align: left;
+                }
+                
+                .mentor-btn:hover {
+                  transform: translateY(-3px);
+                  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                  background-color: #007bff;
+                  color: white;
+                }
+                
+                .mentor-btn .username {
+                  font-weight: bold;
+                }
+
+                .mentor-btn text-muted ml-2 {
+                  font-size: 0.9em;
+                  color: #ffffff;
+                }
+                
+                .mentor-btn .apply-text {
+                  float: right;
+                  opacity: 0.7;
+                }
+                
+                
+              <style>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <h5>Athletics</h5>
+          <div class="accordion" id="athleticsAccordion">
+            <div class="card">
+              <div class="card-header" id="sportsHeading">
+                <h2 class="mb-0">
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#sportsCollapse">
+                    Sports
+                  </button>
+                </h2>
+              </div>
+              <div id="sportsCollapse" class="collapse" data-parent="#athleticsAccordion">
+                <div class="card-body">
+                  <ul class="list-unstyled">
+                    {% for user in random_users %}
+                    {% if user.profile.pk %}
+                    <a href="{% url 'mentor_application' pk=user.profile.pk %}">Apply</a>
+                    <span style="color: blue;">{{ user.username }}</span>
+                    {% endif %}
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% endblock %}
+  {% block script %}
+  <script>
+
+    var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
+    $('.add-border').each(function () {
+      $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
+    });
+
+    function copytoclip(){
+      navigator.clipboard.writeText(window.location.origin + "{% url 'profile-detail-view' request.user.pk %}");
+      alert("Profile URL copied to clipboard");
+    }
+
+  </script>
+  {% endblock %}

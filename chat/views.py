@@ -28,9 +28,9 @@ def room_choice(request, friend_id):
     if not friend:
         messages.error(request, 'Invalid User ID')
         return redirect('room-enroll') 
-    if not FriendList.objects.filter(user=request.user, friends=friend[0]):
-        messages.error(request, 'You need to be friends to chat')
-        return redirect('room-enroll') 
+    # if not FriendList.objects.filter(user=request.user, friends=friend[0]):
+    #     messages.error(request, 'You need to be friends to chat')
+    #     return redirect('room-enroll') 
 
     room = Room.objects.filter(
         Q(author=request.user, friend=friend[0]) | Q(author=friend[0], friend=request.user)

@@ -144,7 +144,7 @@ def LikeCommentView(request): # , id1, id2              id1=post.pk id2=reply.pk
         return JsonResponse({'form':html})
 
 
-""" Home page with all posts """
+""" Home page """
 class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html' 
@@ -152,15 +152,16 @@ class PostListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 5
 
-    def get_context_data(self, *args,**kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(PostListView, self).get_context_data()
         users = list(User.objects.exclude(pk=self.request.user.pk))
-        if len(users) > 3:
-            cnt = 3
-        else:
-            cnt = len(users)
-        random_users = random.sample(users, cnt)
-        context['random_users'] = random_users
+        random.shuffle(users)  # Shuffle all users in place
+        context['random_users'] = users  # Include all users without limit
+
+        # Add active users to the context
+        active_users = Profile.objects.filter(is_online=True)
+        context['active_users'] = active_users
+
         return context
 
 
