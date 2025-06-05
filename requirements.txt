@@ -19,6 +19,7 @@ psycopg2-binary==2.9.10
 
 # Image handling
 Pillow==11.0.0
+numpy==2.2.6
 
 # Authentication & Security
 PyJWT==2.10.1
