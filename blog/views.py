@@ -155,6 +155,7 @@ class PostListView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super(PostListView, self).get_context_data()
         users = list(User.objects.exclude(pk=self.request.user.pk))
+        # Randomize the order of users for display to ensure fair exposure of all users
         random.shuffle(users)  # Shuffle all users in place
         context['random_users'] = users  # Include all users without limit
 

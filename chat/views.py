@@ -38,8 +38,7 @@ def room_choice(request, friend_id):
     if not room:
         create_room = Room(author=request.user, friend=friend[0])
         create_room.save()
-        room = create_room.room_id
-        return redirect('room', room, friend_id)
+        return redirect('room', create_room.room_id, friend_id)
 
     return redirect('room', room[0].room_id, friend_id)
 

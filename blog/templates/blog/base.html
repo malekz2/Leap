@@ -22,10 +22,36 @@
   <script src="{% static 'blog/static/blog/js/dark_mode.js' %}" defer></script>
 
   <link rel="stylesheet" href="{% static 'blog/main.css' %}">
+  <!-- Remove incorrect landing.css reference -->
   <title>LEAP | {% block title %}{% endblock %}</title>
+  {% block head %}{% endblock %}
+  <style>
+    /* Add this to control site-header styling globally */
+    body {
+      padding-top: 0 !important;
+      /* subtle purple-tint layer over the background image */
+      background: linear-gradient(135deg,
+        rgba(102, 51, 255, 0.3) 0%,
+        rgba(51, 102, 255, 0.2) 100%),
+      url('{% static "blog/images/background_image.png" %}') fixed center/cover no-repeat !important;
+    }
+
+    .site-header {
+      background: #fff;
+      /* Default background */
+    }
+
+    /* For pages with full-width hero sections */
+    .full-width-hero .site-header {
+      background: transparent;
+      position: absolute;
+      width: 100%;
+      z-index: 1030;
+    }
+  </style>
 </head>
 
-<body>
+<body class="{% block bodyclass %}{% endblock %}">
   <header class="site-header">
 
     <!-- NAVBAR -->
@@ -33,7 +59,7 @@
   </header>
 
   <!-- MAIN SECTION -->
-  <main role="main" class="container">
+  <main role="main" class="container {% block mainclass %}{% endblock %}">
     <div class="row">
 
       <!-- MESSAGES -->
@@ -241,6 +267,7 @@
   </script>
 
   {% block script %}{% endblock %}
+  {% block additionalScripts %}{% endblock %}
 
 </body>
 

@@ -1,54 +1,187 @@
 {% extends "blog/base.html" %}
+{% load static %}
+{% block title %}Welcome{% endblock %}
 
-{% block title %}Home{% endblock %}
-
-{% block content %}
-
-<!-- ADDITIONAL STYLING -->
-
+{% block head %}
+<link href="{% static 'blog/landing.css' %}" rel="stylesheet">
 <style>
   body {
-    background-color: #fff;
+    overflow-x: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .hero-gradient {
+    background-image: url('{% static "blog/images/Online_Meeting_with_Mentor.png" %}') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    min-height: 100vh !important;
+    width: 100% !important;
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-top: 56px !important;
+    /* Add padding equal to navbar height */
+  }
+
+  .hero-gradient::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(135deg, rgba(102, 51, 255, 0.7) 0%, rgba(51, 102, 255, 0.6) 100%) !important;
+    z-index: 1 !important;
+  }
+
+  .hero-gradient .container {
+    position: relative !important;
+    z-index: 2 !important;
+    height: 100% !important;
+  }
+
+  /* Container overrides */
+  main.container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  main .row {
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .header-spacer {
+    height: 30px;
+    /* Added extra space for better layout */
+  }
+
+  /* Override any site-header styles */
+  .site-header {
+    background: transparent !important;
+    position: absolute !important;
+    width: 100% !important;
+    z-index: 1030 !important;
+    top: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Ensure feature cards have correct styling */
+  .feature-card {
+    background: white !important;
+    color: #333 !important;
+    border-radius: 12px !important;
+    padding: 1.5rem !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Hero content container */
+  .hero-content {
+    padding-top: 7rem !important;
+  }
+
+  /* Make sure text is readable */
+  .hero-title,
+  .hero-sub {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
   }
 </style>
+{% endblock %}
 
-<div>
+{% block mainclass %}full-width{% endblock %}
 
-  <!-- Page Hero-->
-  <section class=" page-header page-header-light bg-white mt-4 container">
-    <div class="page-header-content pt-5">
-      <div class="container">
-        <div class="row align-items-center">
-          <div class="col-lg-6 " data-aos="fade-up">
-            <h1 style="" class="page-header-title font-weight-bold">Linking Excellence And Potential</h1>
-            <br>
-            <p class="page-header-text mb-5">
-              <!--Linking Excellence And Potential. -->
-              <br><br>
-              Designed and developed by <a target="_blank" href="http://localhost:8000/user/public-profile/Admin/">Malek
-                Zuhdi</a>
-            </p>
+{% block content %}
+<section class="hero-gradient text-white">
+  <div class="container hero-content">
+    <div class="row align-items-center">
+      <!-- Hero Text -->
+      <div class="col-lg-6">
+        <h1 class="hero-title display-4">Linking Excellence And Potential</h1>
+        <p class="hero-sub my-4 lead">
+          AI‑powered mentorship matching at your school—connect with peers, share insights, and grow together.
+        </p>
+        <div class="header-spacer"></div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'blog-home' %}" class="btn btn-primary-pill mr-3">Get Started</a>
+        <a href="#" class="btn btn-secondary-ghost">Logged In</a>
+        {% else %}
+        <a href="{% url 'register' %}" class="btn btn-primary-pill mr-3">Get Started</a>
+        <a href="{% url 'account_login' %}" class="btn btn-secondary-ghost">Login</a>
+        {% endif %}
+      </div>
+    </div>
 
-            {% if user.is_authenticated %}
-            <a class="btn btn-lg btn-primary font-weight-bold mr-2 rounded-pill px-4 py-2"
-              href="{% url 'blog-home' %}">Get Started</a>
-            <a class="btn btn-lg btn-primary-soft text-primary font-weight-bold" href="#"><i
-                class="far fa-check-circle"></i>&nbsp;LOGGED IN</a>
-            {% else %}
-            <a class="btn btn-lg btn-primary font-weight-bold mr-2 rounded-pill px-4 py-2"
-              href="{% url 'register' %}">REGISTER</a>
-            <a class="btn btn-lg btn-primary-soft text-primary font-weight-bold"
-              href="{% url 'account_login' %}">LOGIN</a>
-            {% endif %}
+    <div class="header-spacer"></div>
+    <div class="header-spacer"></div>
+    <div class="header-spacer"></div>
+
+    <!-- Feature Cards -->
+    <div class="row feature-cards mt-5">
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon">
+            <i class="fas fa-tachometer-alt fa-2x text-indigo"></i>
           </div>
-          <div class="col-lg-6 d-none d-lg-block" data-aos="fade-up" data-aos-delay="100"><img class="img-fluid"
-              src="/static/blog/images/undraw_social_interaction_cy9i.png" /></div>
+          <h5>Streamlined Dashboard</h5>
+          <p>Access your matches, messages, and progress in one place.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line fa-2x text-indigo"></i>
+          </div>
+          <h5>Real‑Time Reporting</h5>
+          <p>See analytics on engagement and match success instantly.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-card text-center">
+          <div class="feature-icon">
+            <i class="fas fa-comments fa-2x text-indigo"></i>
+          </div>
+          <h5>Direct Communication</h5>
+          <p>Chat with mentors and peers without leaving the platform.</p>
         </div>
       </div>
     </div>
-    <br>
-  </section>
+  </div>
+</section>
+{% endblock %}
 
-</div>
+{% block script %}
+<script>
+  // Ensure the container takes full width and page structure is correct
+  document.addEventListener('DOMContentLoaded', function () {
+    // Set main container to full width
+    const mainContainer = document.querySelector('main.container');
+    if (mainContainer) {
+      mainContainer.style.maxWidth = '100%';
+      mainContainer.style.padding = '0';
+      mainContainer.style.margin = '0';
 
+      // Remove any unwanted margins/padding from row
+      const mainRow = mainContainer.querySelector('.row');
+      if (mainRow) {
+        mainRow.style.margin = '0';
+        mainRow.style.width = '100%';
+      }
+    }
+
+    // Ensure header is positioned correctly
+    const siteHeader = document.querySelector('.site-header');
+    if (siteHeader) {
+      siteHeader.style.position = 'absolute';
+      siteHeader.style.width = '100%';
+      siteHeader.style.zIndex = '1030';
+      siteHeader.style.background = 'transparent';
+    }
+  });
+</script>
 {% endblock %}

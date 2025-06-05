@@ -7,7 +7,7 @@
 
 {% comment %}
 
-<div class="col-md-8">
+<div class="col-md-8 mb-6" >
 
   {% for post in posts %}
 
@@ -104,64 +104,21 @@
 
   <!---->
 
-
-
+  
   <!-- blog/templates/blog/home.html -->
-
+  
   <h2>Active Users</h2>
   <p>There are {{ active_users|length }} active users currently.</p>
-
-  <!--
-
-  {% comment %}
-  <div class="content-section " style="border-top: 4px solid rgb(255, 0, 0);">
-    <h4>Potential Mentors</h4>
-    <br>
-    <ul class="list-group">
-      {% for user in random_users %}
-      {% if user.profile.google_form_url %}
-      <a href="{{ user.profile.google_form_url }}">
-        {% else %}
-        <a href="{% url 'profile-detail-view' user.pk %}">
-          {% endif %}
-          <li class="list-group-item list-group-item-light">
-            <span style="color: rgb(255, 0, 0);">{{ user.username }}</span> Experienced in: {{ user.profile.teach }}
-          </li>
-        </a>
-        {% endfor %}
-    </ul>
-    <br>
-  </div>
-
-
-  <div class="content-section " style="border-top: 4px solid blue;">
-    <h4>Potential Protege's</h4>
-    <br>
-    <ul class="list-group">
-      {% for user in random_users %}
-      <a href="{% url 'profile-detail-view' user.pk %}">
-        <li class="list-group-item list-group-item-light">
-          <span style="color: blue;">{{ user.username }}</span> Interested in: {{ user.profile.learn }}
-        </li>
-      </a>
-      {% endfor %}
-    </ul>
-    <br>
-  </div>
-
-
 </div>
 
-{% endcomment %}
--->
-
-<div class="row">
+<div class="container">
+<div class="row width-100">
   <!-- AI search - Left column -->
-  <div class="col-md-12 px-0">
-    <div class="content-section" style="border-top: 4px solid rgb(11, 124, 255);">
+  <div class="col-md-6 px-0">
+    <div class="content-section mr-1" style="border-top: 4px solid rgb(11, 124, 255);">
       <h4>Registered Users <small class="text-muted">({{ random_users|length }} total)</small></h4>
       <br>
-      <div class="user-list-container" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 5px; padding: 0 5px;">
+      <div class="user-list-container" style="max-height: 300px; overflow-y: scroll; border: 1px solid #eee; border-radius: 5px; padding: 0 5px;">
         <ul class="list-group">
         <!--leave everything in the for loop alone-->
           {% for user in random_users %}
@@ -185,8 +142,8 @@
   </div>
   
   <!-- Profile - Right column -->
-  <div class="col-md-12 px-0">
-    <div class="content-section shadow-sm" style="border-top: 4px solid #7952b3; border-radius: 8px; margin-bottom: 20px;">
+  <div class="col-md-6 px-0">
+    <div class="content-section shadow-sm ml-1" style="border-top: 4px solid #7952b3; border-radius: 8px; margin-bottom: 20px;">
       <h4 class="d-flex align-items-center"><i class="fas fa-user-circle mr-2"></i> Your Profile</h4>
       <div class="card profile-card" style="border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
         <div class="account-img-container text-center my-3">
@@ -240,51 +197,101 @@
       </div>
     </div>
   </div>
-      
-      <!-- Friends list with chat buttons -->
-      <div class="card mt-3 friend-card" style="border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-        <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #4270E7, #7952b3); color: white; border-radius: 10px 10px 0 0;">
-          <h5 class="mb-0"><i class="fas fa-user-friends mr-2"></i> Friends</h5>
-          <span class="badge badge-light">
-            {% if request.user.friendlist.friends.all %}
-              {{ request.user.friendlist.friends.all|length }}
-            {% else %}
-              0
-            {% endif %}
-          </span>
-        </div>
-        <div class="card-body p-0"></div>
-          <div class="friend-list" style="max-height: 250px; overflow-y: auto;"></div>
-            {% if request.user.friendlist.friends.all %}
-              <ul class="list-group list-group-flush">
-                {% for friend in request.user.friendlist.friends.all %}
-                  <li class="list-group-item d-flex justify-content-between align-items-center friend-item">
-                    <div class="d-flex align-items-center">
-                      <img class="rounded-circle mr-2" src="{{ friend.profile.image.url }}" alt="{{ friend.username }}" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #eee;">
-                      <div>
-                        <div class="font-weight-bold">{{ friend.username }}</div>
-                        <small class="text-muted">{{ friend.profile.bio|truncatechars:20 }}</small>
-                      </div>
-                    </div>
-                    <a href="{% url 'room-choice' friend.id %}" class="btn btn-sm btn-success chat-btn">
-                      <i class="fas fa-comment-dots mr-1"></i> Chat
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <div class="p-4 text-center text-muted">
-                <i class="far fa-sad-tear fa-2x mb-2"></i>
-                <p>You don't have any friends yet.</p>
-                <a href="#" class="btn btn-sm btn-outline-primary">Find Friends</a>
-              </div>
-            {% endif %}
+
+  <!-- Friends list with chat buttons -->
+  <div class="col-md-12 px-0">
+  <div class="card mt-3 friend-card" style="border-radius: 10px; border: none; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(to right, #4270E7, #7952b3); color: white; border-radius: 10px 10px 0 0;">
+      <h5 class="mb-0"><i class="fas fa-user-friends mr-2"></i> Friends</h5>
+      <span class="badge badge-light">
+        {% if request.user.friendlist.friends.all %}
+          {{ request.user.friendlist.friends.all|length }}
+        {% else %}
+          0
+        {% endif %}
+      </span>
+    </div>
+    <div class="card-body p-0"></div>
+      <div class="friend-list" style="max-height: 250px; overflow-y: auto;"></div>
+        {% if request.user.friendlist.friends.all %}
+          <ul class="list-group list-group-flush">
+            {% for friend in request.user.friendlist.friends.all %}
+              <li class="list-group-item d-flex justify-content-between align-items-center friend-item">
+                <div class="d-flex align-items-center">
+                  <img class="rounded-circle mr-2" src="{{ friend.profile.image.url }}" alt="{{ friend.username }}" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #eee;">
+                  <div>
+                    <div class="font-weight-bold">{{ friend.username }}</div>
+                    <small class="text-muted">{{ friend.profile.bio|truncatechars:20 }}</small>
+                  </div>
+                </div>
+                <a href="{% url 'room-choice' friend.id %}" class="btn btn-sm btn-success chat-btn">
+                  <i class="fas fa-comment-dots mr-1"></i> Chat
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="p-4 text-center text-muted">
+            <i class="far fa-sad-tear fa-2x mb-2"></i>
+            <p>You don't have any friends yet.</p>
+            <a href="#" class="btn btn-sm btn-outline-primary">Find Friends</a>
           </div>
-        </div>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+</div>
+      
+    </div>
+  </div>
+</div>
+
+  <!--
+
+  {% comment %}
+  <div class="content-section " style="border-top: 4px solid rgb(255, 0, 0);">
+    <h4>Potential Mentors</h4>
+    <br>
+    <ul class="list-group">
+      {% for user in random_users %}
+      {% if user.profile.google_form_url %}
+      <a href="{{ user.profile.google_form_url }}">
+        {% else %}
+        <a href="{% url 'profile-detail-view' user.pk %}">
+          {% endif %}
+          <li class="list-group-item list-group-item-light">
+            <span style="color: rgb(255, 0, 0);">{{ user.username }}</span> Experienced in: {{ user.profile.teach }}
+          </li>
+        </a>
+        {% endfor %}
+    </ul>
+    <br>
+  </div>
+
+
+  <div class="content-section " style="border-top: 4px solid blue;">
+    <h4>Potential Protege's</h4>
+    <br>
+    <ul class="list-group">
+      {% for user in random_users %}
+      <a href="{% url 'profile-detail-view' user.pk %}">
+        <li class="list-group-item list-group-item-light">
+          <span style="color: blue;">{{ user.username }}</span> Interested in: {{ user.profile.learn }}
+        </li>
+      </a>
+      {% endfor %}
+    </ul>
+    <br>
+  </div>
+
+
+</div>
+
+{% endcomment %}
+-->
+
+
 
 <style>
   .content-section {
@@ -493,17 +500,14 @@
 
   {% endblock %}
   {% block script %}
+  {% if request.user.is_authenticated %}
   <script>
-
-    var colors = ['#FB9797', '#FB84BD', '#EA84FB', '#FF6D3F', '#4270E7', 'green', 'blue'];
-    $('.add-border').each(function () {
-      $(this).css('border-top', "3px solid " + colors[Math.floor(Math.random() * colors.length)]);
-    });
-
-    function copytoclip(){
-      navigator.clipboard.writeText(window.location.origin + "{% url 'profile-detail-view' request.user.pk %}");
+  function copytoclip(){
+      const pk = {{ request.user.pk }};
+      const profileUrl = `${window.location.origin}/user/${pk}/`;
+      navigator.clipboard.writeText(profileUrl);
       alert("Profile URL copied to clipboard");
-    }
-
+  }
   </script>
+  {% endif %}
   {% endblock %}

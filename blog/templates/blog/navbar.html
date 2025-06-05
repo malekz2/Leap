@@ -1,6 +1,6 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-steel fixed-top">
+<nav class="navbar navbar-expand-lg navbar-glass fixed-top">
   <div class="container">
-    <a class="navbar-brand mr-4 pr-3" href="/">LEAP</a>
+    <a class="navbar-brand text-white font-weight-bold" href="/">LEAP</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
       aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -16,50 +16,25 @@
         </div>
       </div>
 
-
-
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="{% url 'blog-home' %}">Dashboard</a>
-        <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
-        <a class="nav-item nav-link"
-          href="https://docs.google.com/forms/d/e/1FAIpQLSdOEW5nGz4yYAmjEoRNAjztuxDdoR50g7QWCW-UjI6mW2d2lQ/viewform?usp=dialog">Bug
-          Reports</a>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'blog-home' %}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'blog-about' %}">About</a></li>
+        <li class="nav-item"><a class="nav-link text-white"
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdOEW5nGz4yYAmjEoRNAjztuxDdoR50g7QWCW-UjI6mW2d2lQ/viewform?usp=dialog">Bug
+            Reports</a></li>
 
         {% if user.is_authenticated %}
-        <a class="nav-item nav-link" href="{% url 'show-notifications' %}">Notifications</a>
-        <a class="nav-item nav-link" href="{% url 'room-enroll' %}">Chats</a>
-        <!-- <a class="nav-item nav-link" href="{% url 'vc-lobby' %}">Calls</a> -->
-        <!--
-        {% comment %}
-        <div class="dropdown">
-          <a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink1" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Posts
-          </a>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
-            <a class="dropdown-item" href="{% url 'post-create' %}"><i class="fas fa-plus-circle"></i>&nbsp;&nbsp;New
-              Post</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'posts-follow-view' %}">Feeds</a>
-            <a class="dropdown-item" href="{% url 'all-like' %}">Liked Posts</a>
-            <a class="dropdown-item" href="{% url 'all-save' %}">Saved Posts</a>
-            <a class="dropdown-item" href="{% url 'blog-home' %}">All Posts</a>
-            <a class="dropdown-item" href="{% url 'user-posts' user %}">My Posts</a>
-          </div>
-        </div>
-        {% endcomment %}
-      -->
-        {% endif %}
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'show-notifications' %}">Notifications</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'room-enroll' %}">Chats</a></li>
+        <!-- <li class="nav-item"><a class="nav-link text-white" href="{% url 'vc-lobby' %}">Calls</a></li> -->
 
-        {% if user.is_authenticated %}
-        <div class="dropdown">
-          <a class="dropdown-toggle nav-link" href="#" role="button" id="dropdownMenuLink2" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            <img class="rounded-circle" style="height: 20px; width: 20px;" src="{{user.profile.image.url}}"
-              alt="">&nbsp;{{user|truncatechars:"10"}}
-
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" role="button" id="dropdownMenuLink2"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img class="rounded-circle" style="height: 24px; width: 24px;" src="{{user.profile.image.url}}" alt="">
+            {{user|truncatechars:"8"}}
           </a>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink2">
             <a class="dropdown-item" href="{% url 'profile-detail-view' user.id %}"><i
                 class="far fa-user"></i>&nbsp;&nbsp;Profile</a>
             <a class="dropdown-item" href="{% url 'public-profile' user %}"><i
@@ -73,13 +48,53 @@
               </button>
             </form>
           </div>
-        </div>
+        </li>
         {% else %}
-        <a class="nav-item nav-link" href="{% url 'account_login' %}">Login</a>
-        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'account_login' %}">Login</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="{% url 'register' %}">Register</a></li>
         {% endif %}
-       
-      </div>
+      </ul>
     </div>
   </div>
 </nav>
+
+<style>
+  .navbar-glass {
+    background: transparent !important;
+    /* Completely transparent */
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+    border-bottom: none !important;
+  }
+
+  .navbar-glass .navbar-brand,
+  .navbar-glass .nav-link {
+    color: white !important;
+    text-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5) !important;
+    /* Stronger text shadow for readability */
+    font-weight: 600 !important;
+  }
+
+  #searchbar input {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
+
+  #searchbar input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+
+  .search-btn {
+    background: transparent !important;
+    color: white !important;
+  }
+
+  /* Make dropdown menus work properly with transparent navbar */
+  .dropdown-menu {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+</style>
