@@ -69,3 +69,6 @@ zope.interface==7.2
 
 # Time zone support
 pytz==2024.2
+
+# Gunicorn
+gunicorn==20.1.0
