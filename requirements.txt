@@ -41,7 +41,7 @@ autobahn==24.4.2
 Automat==24.8.1
 constantly>=23.10,<24
 hyperlink==21.0.0
-incremental==22.10.0
+incremental>=24.7,<25
 pyOpenSSL==24.2.1
 service-identity==24.2.0
 txaio==23.1.1
